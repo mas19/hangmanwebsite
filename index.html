@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
+
+<body class="back">
+
+
+  <h1 class="wrapper large" id="welcome"></h1>
+  <h2 class="wrapper small" id="counter">You have 10 guesses</h2>
+  <h1 class="wrapper large" id="score"> </h1>
+
+  <div class="btn-group">
+    <button onclick='guess(this)'>a</button>
+    <button onclick='guess(this)'>b</button>
+    <button onclick='guess(this)'>c</button>
+    <button onclick='guess(this)'>d</button>
+    <button onclick='guess(this)'>e</button>
+    <button onclick='guess(this)'>f</button>
+    <button onclick='guess(this)'>g</button>
+    <button onclick='guess(this)'>h</button>
+    <button onclick='guess(this)'>i</button>
+    <button onclick='guess(this)'>j</button>
+    <button onclick='guess(this)'>k</button>
+    <button onclick='guess(this)'>l</button>
+    <button onclick='guess(this)'>m</button>
+    <button onclick='guess(this)'>n</button>
+    <button onclick='guess(this)'>o</button>
+    <button onclick='guess(this)'>p</button>
+    <button onclick='guess(this)'>q</button>
+    <button onclick='guess(this)'>r</button>
+    <button onclick='guess(this)'>s</button>
+    <button onclick='guess(this)'>t</button>
+    <button onclick='guess(this)'>u</button>
+    <button onclick='guess(this)'>v</button>
+    <button onclick='guess(this)'>w</button>
+    <button onclick='guess(this)'>x</button>
+    <button onclick='guess(this)'>y</button>
+    <button onclick='guess(this)'>z</button>
+  </div>
+
+  <div class="wrapper small guesser">
+    <p2 id="guesses">You haven't guessed anything yet</p2>
+  </div>
+  <h2 id="winlose"></h2>
+
+  <script>
+    var word = ['w','i','l','l','i','a','m','s'];
+    var progress = new Array();
+    var guessed = false;
+    var numleft = 10;
+    var won = false;
+    var lost = false;
+
+    var txt = "Welcome to hangman!";
+    var speed = 50;
+    var k = 0;
+
+    begin();
+
+    var j;
+    for(j=0; j<word.length;j++){
+      progress[j] = '_';
+    }
+    function printArray(a) {
+      var returnString = "";
+      var i;
+      for (i = 0; i < a.length; i++) {
+        returnString += a[i] + " ";
+      }
+      return returnString;
+    }
+    function guess(element) {
+      if(won == false && lost ==false && element.innerHTML != '-'){
+        //displays guessed letters
+        if (guessed == false) {
+          document.getElementById("guesses").innerHTML = "Guessed letters: " + element.innerHTML;
+          guessed = true;
+        }
+        else {
+          document.getElementById("guesses").innerHTML = document.getElementById("guesses").innerHTML + ", " + element.innerHTML;
+        }
+        //Decrements guess counter if incorrect guess
+        if(word.includes(element.innerHTML)==false){
+          document.getElementById("counter").innerHTML = "You have " + --numleft + " incorrect guesses remaining";
+        }   
+        
+        //checks each spot a letter could be in the word, 
+        //updates all found spots
+        var x;
+        for(x = 0; x<word.length;x++){
+          if (word[x]==element.innerHTML){
+            progress[x] = element.innerHTML;
+          }
+        }
+
+        //visually updates progress
+        document.getElementById("score").innerHTML = printArray(progress);
+        
+        //checks if game is over
+        if (progress.toString() == word.toString()){
+          won = true;
+          document.getElementById("winlose").innerHTML = "You won!";
+          document.getElementById("winlose").setAttribute("class","win");
+        }
+        else if(numleft == 0){
+          lost = true;
+          document.getElementById("winlose").innerHTML = "You lost!";
+          document.getElementById("winlose").setAttribute("class","lose");
+        }
+      }
+      //disables the guessed button
+      element.innerHTML = '-'
+    }
+
+    function begin(){
+      if (k < txt.length) {
+        document.getElementById("welcome").innerHTML += txt.charAt(k);
+        k++;
+        setTimeout(begin, speed);
+      }
+      document.getElementById("score").innerHTML = printArray(progress);
+    }
+  </script>
+</body>
+
+</html>
